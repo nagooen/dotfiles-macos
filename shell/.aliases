@@ -1,0 +1,54 @@
+# ~/.aliases - Shell aliases
+
+# Navigation shortcuts
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+
+# List directory contents
+alias ls='ls -G'
+alias ll='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Git shortcuts
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git pull'
+alias gco='git checkout'
+alias gb='git branch'
+alias gd='git diff'
+alias glog='git log --oneline --graph --decorate'
+
+# Homebrew shortcuts
+alias brewup='brew update && brew upgrade && brew cleanup'
+
+# System shortcuts
+alias reload='source ~/.zshrc'  # or ~/.bashrc if using bash
+alias path='echo $PATH | tr ":" "\n"'
+
+# Safety nets
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Editor shortcuts
+alias vim='vim'
+alias v='vim'
+
+# Network utilities
+alias myip='curl ifconfig.me'
+alias localip='ipconfig getifaddr en0'
+
+# Project shortcuts (customize these)
+# alias projects='cd ~/projects'
+# alias work='cd ~/projects/work'
+
+# Docker shortcuts (if you use Docker)
+alias dc='docker compose'
+alias dps='docker ps'
+alias dimg='docker images'

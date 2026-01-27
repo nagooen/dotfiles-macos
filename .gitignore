@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
+
+# Project-specific notes (keep personal notes out of version control)
+claude/notes/*-personal.md
+
+# Keep directory structure
+!.gitkeep

@@ -1,0 +1,16 @@
+Squad,GitHub Team,Domain,Category,Item Type,Item Name,Notes
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,carer_profile.rake,Onboarding and profile management
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,carer_location.rake,Location management for support providers
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,care_knowledge.rake,Care knowledge and skills management
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,worker_type.rake,Worker type definitions and management
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,worker_type_service_categories.rake,Mapping worker types to service categories
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,worker_review.rake,Worker reviews and ratings
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,workers.rake,General worker-related tasks (if onboarding-related)
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,bulk_import_availability_data.rake,Bulk import of availability schedules
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,oho.rake,OHO (Onboarding Health Organisation) related tasks
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,asset.rake,Document and asset management (if document-related)
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,modify_qualification_names.rake,Qualification name modifications
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,service_qualifications.rake,Service qualification mappings
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Rake Tasks,Task,response_rate_fix.rake,Carer response rate calculations
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Packs,Pack,packs/oho/,Onboarding Health Organisation functionality
+SP Liftoff,@bettercaring/sp-lift-off-squad,Support Provider / Worker Onboarding - Qualifications - Availability and Preferred Services,Packs,Pack,packs/personal_documents/,Personal document management for providers
