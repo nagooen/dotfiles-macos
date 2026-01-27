@@ -184,7 +184,7 @@ Result: No direct examples found (new feature)
 **Step 4: Local Codebase**
 ```
 Grep: pattern=fusionauth_application path=inf-fusionauth
-Found: app_mable.tf uses scope_handling_policy and unknown_scope_policy
+Found: app_example.tf uses scope_handling_policy and unknown_scope_policy
 Does NOT use provided_scope_policy (not needed for that app)
 ```
 
