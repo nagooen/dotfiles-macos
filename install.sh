@@ -131,6 +131,12 @@ install_claude() {
         # Copy the entire claude directory structure
         cp -r "$DOTFILES_DIR/claude/"* "$HOME/.claude/"
 
+        # Make statusline script executable
+        if [[ -f "$HOME/.claude/statusline-command.sh" ]]; then
+            chmod +x "$HOME/.claude/statusline-command.sh"
+            echo -e "${GREEN}  ✓ Statusline script made executable${NC}"
+        fi
+
         echo -e "${GREEN}  ✓ Claude Code configurations installed to ~/.claude${NC}"
         echo -e "${YELLOW}  ℹ This includes:${NC}"
         echo -e "${YELLOW}    - Agents (specialized AI workflows)${NC}"

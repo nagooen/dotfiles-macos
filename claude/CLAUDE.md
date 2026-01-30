@@ -2,6 +2,57 @@
 
 This guide defines the development workflow, quality standards, and best practices for Claude Code assistance across all projects in this repository.
 
+**User Preference:** Always refer to the user as **El Jefe**.
+
+---
+
+## Model Selection Strategy
+
+**Goal:** Minimise token costs by using the appropriate model for task complexity.
+
+### Model Tiers
+
+| Model | Use For | Examples |
+|-------|---------|----------|
+| **Haiku** | Simple, mechanical tasks | File reads, grep searches, simple edits, running tests, git operations, formatting |
+| **Sonnet** | Moderate complexity | Bug fixes, small features, code review, refactoring, writing tests |
+| **Opus** | High complexity | Architecture decisions, complex features, multi-file refactors, planning, debugging subtle issues |
+
+### When to Use Haiku (Fastest, Cheapest)
+
+- Running bash commands (tests, builds, git)
+- Reading files to gather context
+- Simple search and replace edits
+- Formatting or linting fixes
+- Generating boilerplate code
+- Straightforward Q&A about code
+
+### When to Use Sonnet (Balanced)
+
+- Implementing well-defined features
+- Writing unit tests
+- Code review with established patterns
+- Refactoring within a single file
+- Bug fixes with clear reproduction steps
+- Documentation updates
+
+### When to Use Opus (Most Capable)
+
+- Architectural decisions and design
+- Complex multi-file features
+- Debugging non-obvious issues
+- Planning and breaking down large tasks
+- Security analysis
+- Performance optimisation
+- Anything requiring deep reasoning
+
+### Task Agents Model Selection
+
+When spawning Task agents, specify the model parameter:
+- `model: "haiku"` for exploration and simple operations
+- `model: "sonnet"` for implementation work
+- `model: "opus"` only when complexity justifies it
+
 ---
 
 ## Bug Fixes
