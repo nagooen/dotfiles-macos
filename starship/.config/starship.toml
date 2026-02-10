@@ -1,0 +1,57 @@
+# https://starship.rs/config/
+# https://www.nerdfonts.com/cheat-sheet
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+command_timeout = 3000
+
+[character]
+success_symbol = '[➜](bold green)'
+
+[package]
+disabled = true
+
+[directory]
+style = "bold bright-blue"
+
+[git_branch]
+style = "bold bright-white"
+symbol = "󰘬 "
+
+[git_status]
+format = '([\[$all_status$ahead_behind \]]($style) )'
+ahead = " [](purple)[$count](white)"
+behind = " [](cyan)[$count](white)"
+conflicted = ' [=$count](yellow)'
+deleted = ' [✘$count](bright-black)'
+diverged = " [](cyan)[$ahead_count](white)[](purple)[$behind_count](white)"
+modified = ' [*$count](red)'
+renamed = " [»$count](purple)"
+staged = " [+$count](green)"
+stashed = " [\\$$count](yellow)"
+style = "bold bright-white"
+untracked = " [?$count](cyan)"
+
+[git_commit]
+only_detached = true
+style = "bright-black"
+format = "[$hash]($style) "
+
+[ruby]
+symbol = " "
+
+[nodejs]
+symbol = "󰎙 "
+
+[python]
+symbol = "󰌠 "
+
+[kubernetes]
+disabled = false
+
+[aws]
+symbol = '🅰 '
+
+[aws.region_aliases]
+ap-southeast-2 = 'au'

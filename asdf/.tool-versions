@@ -1,0 +1,4 @@
+ruby 3.3.6
+nodejs 24.3.0
+rust 1.83.0
+kubectl 1.28.7

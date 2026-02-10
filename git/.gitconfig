@@ -1,78 +1,134 @@
 # ~/.gitconfig - Git configuration
+# https://git-scm.com/docs/git-config
 
 [user]
-    # Update these with your information
-    name = Your Name
-    email = your.email@example.com
+    name = Duy Nguyen
+    email = duy.nguyen@mable.com.au
+    signingkey = 1185A8F85D497553
 
-[core]
-    editor = vim
-    autocrlf = input
-    excludesfile = ~/.gitignore_global
+[alias]
+    a = add
+    aa = add --all
+    ap = add --patch
+    b = branch
+    ba = branch --all
+    br = branch --remote
+    branches = branch --sort=-committerdate
+    ca = commit --amend
+    ci = commit
+    cm = commit -v
+    cl = clone
+    co = checkout
+    contributors = shortlog --summary --numbered
+    df = diff
+    dc = diff --cached
+    f = fetch
+    l = log --date=format:'%b %d, %Y' --pretty=format:'%C(yellow bold)%h%Creset%C(white)%d%Creset %s%n%C(blue)%aN <%ae> | %cd%n'
+    lg = log --graph --stat --date=format:'%b %d, %Y' --pretty=format:'%C(yellow bold)%h%Creset%C(white)%d%Creset %s%n%C(blue)%aN <%ae> | %cd%n'
+    last = log -1 HEAD
+    pl = pull
+    ps = push
+    psf = push --force-with-lease
+    recent = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+    rv = remote -v
+    s = status
+    st = status
+    tl = tag --list
+    re = reset
+    rsh = reset --soft HEAD^
+    unstage = reset HEAD --
+    visual = log --oneline --graph --decorate --all
+    wch = whatchanged -p --abbrev-commit --pretty=medium -10
 
-[init]
-    defaultBranch = main
-
-[pull]
-    rebase = false
-
-[push]
-    default = simple
-    followTags = true
-
-[fetch]
-    prune = true
+[apply]
+    whitespace = nowarn
 
 [color]
-    ui = auto
+    ui = true
 
 [color "branch"]
-    current = yellow reverse
+    current = white bold
     local = yellow
-    remote = green
+    remote = cyan
 
 [color "diff"]
-    meta = yellow bold
-    frag = magenta bold
-    old = red bold
+    frag = cyan bold
+    meta = white
     new = green bold
+    old = red bold
+    commit = yellow bold
+    whitespace = red reverse
+
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
 
 [color "status"]
     added = green
     changed = yellow
-    untracked = red
+    untracked = cyan
 
-[alias]
-    # Common shortcuts
-    st = status
-    co = checkout
-    br = branch
-    ci = commit
-    unstage = reset HEAD --
-    last = log -1 HEAD
-    visual = log --oneline --graph --decorate --all
+[commit]
+    template = ~/.gitmessage
+    gpgSign = true
 
-    # More complex aliases
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    amend = commit --amend --no-edit
-    fixup = commit --fixup
-    squash = commit --squash
+[core]
+    autocrlf = input
+    excludesfile = ~/.gitignore_global
+    ignorecase = false
+    safecrlf = warn
+    abbrev = 7
+    editor = vim
 
-    # Show branches sorted by last modified
-    branches = branch --sort=-committerdate
+[credential]
+    helper = /usr/local/share/gcm-core/git-credential-manager
 
-    # Show contributors
-    contributors = shortlog --summary --numbered
+[credential "https://dev.azure.com"]
+    useHttpPath = true
 
 [diff]
-    tool = vimdiff
+    tool = vimdiff3
+    submodule = log
+
+[pager]
+    diff = diff-so-fancy | less --tabs=4 -RFXS
+    log = less -+X
+
+[fetch]
+    prune = true
+
+[gpg]
+    program = /opt/homebrew/bin/gpg
+
+[include]
+    path = ~/.gitconfig.local
+
+[init]
+    defaultBranch = main
 
 [merge]
-    tool = vimdiff
     conflictstyle = diff3
+    ff = false
+
+[pull]
+    rebase = merges
+
+[push]
+    default = simple
+
+[status]
+    submoduleSummary = true
+
+[tag]
+    gpgSign = true
 
 [help]
     autocorrect = 1
 
-[credential]
-    helper = osxkeychain
+[includeIf "gitdir:~/projects/personal/"]
+    path = ~/.gitconfig.d/personal
+
+[includeIf "gitdir:~/projects/mableit/"]
+    path = ~/.gitconfig.d/work

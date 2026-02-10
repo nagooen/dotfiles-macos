@@ -1,6 +1,6 @@
-# ~/.aliases - Shell aliases
+# Zsh aliases
 
-# Navigation shortcuts
+# Navigation
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -24,31 +24,35 @@ alias gb='git branch'
 alias gd='git diff'
 alias glog='git log --oneline --graph --decorate'
 
-# Homebrew shortcuts
+# Homebrew
 alias brewup='brew update && brew upgrade && brew cleanup'
 
-# System shortcuts
-alias reload='source ~/.zshrc'  # or ~/.bashrc if using bash
-alias path='echo $PATH | tr ":" "\n"'
+# System
+alias reload='source ~/.zshrc'
 
 # Safety nets
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
-# Editor shortcuts
-alias vim='vim'
+# Editor
 alias v='vim'
 
-# Network utilities
+# Network
 alias myip='curl ifconfig.me'
 alias localip='ipconfig getifaddr en0'
 
-# Project shortcuts (customize these)
-# alias projects='cd ~/projects'
-# alias work='cd ~/projects/work'
+# Finder
+alias o='open . &'
 
-# Docker shortcuts (if you use Docker)
-alias dc='docker compose'
+# Docker
 alias dps='docker ps'
 alias dimg='docker images'
+alias dcu='docker compose up -d'
+alias dcd='docker compose down'
+alias dpsa='docker ps -a'
+alias dim='docker images'
+alias dsp='docker system prune --all'
+
+# GitHub CLI account switching
+alias gh-who='gh api user --jq .login'

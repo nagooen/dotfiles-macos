@@ -1,0 +1,100 @@
+# Brewfile - Homebrew package management
+# Install: brew bundle --file=~/projects/dotfiles-macos/brew/Brewfile
+# Dump:    brew bundle dump --file=~/projects/dotfiles-macos/brew/Brewfile --force
+
+# Taps
+tap "homebrew/bundle"
+tap "homebrew/services"
+
+# Core tools
+brew "coreutils"                  # GNU core utilities
+brew "curl"                       # HTTP client
+brew "findutils"                  # GNU find, xargs
+brew "gnu-sed"                    # GNU sed
+brew "git"                        # Version control
+brew "gnupg"                      # GPG encryption
+brew "openssl"                    # TLS/SSL
+brew "readline"                   # Command-line editing
+brew "stow"                       # Symlink farm manager
+brew "tree"                       # Directory tree viewer
+brew "wget"                       # File downloader
+
+# Shell
+brew "zsh"                        # Z shell
+brew "zsh-completions"            # Additional completions
+brew "zsh-autosuggestions"        # Command suggestions
+brew "zsh-syntax-highlighting"    # Syntax highlighting
+brew "starship"                   # Cross-shell prompt
+
+# CLI tools
+brew "bat"                        # Cat with syntax highlighting
+brew "diff-so-fancy"              # Better git diffs
+brew "eza"                        # Modern ls replacement (successor to exa)
+brew "fd"                         # Simple alternative to find
+brew "fzf"                        # Fuzzy finder
+brew "gh"                         # GitHub CLI
+brew "htop"                       # System monitor
+brew "jq"                         # JSON processor
+brew "ripgrep"                    # Fast search tool (rg)
+brew "tmux"                       # Terminal multiplexer
+brew "yq"                         # YAML processor
+
+# Version managers
+brew "asdf"                       # Universal version manager
+brew "nvm"                        # Node version manager
+
+# Development
+brew "node"                       # Node.js
+brew "python@3.13"                # Python 3
+brew "shellcheck"                 # Shell script linter
+brew "neovim"                     # Modern Vim
+brew "vim"                        # Text editor
+
+# Database
+brew "libpq"                      # PostgreSQL client library
+brew "postgresql@14"              # PostgreSQL database
+brew "redis"                      # Redis database
+
+# Cloud and DevOps
+brew "awscli"                     # AWS CLI
+brew "docker"                     # Docker
+brew "docker-compose"             # Docker Compose
+brew "terraform"                  # Infrastructure as code
+brew "kubernetes-cli"             # kubectl
+
+# Security
+brew "pinentry-mac"               # GPG PIN entry for macOS
+
+# Media / Image processing
+brew "imagemagick"                # Image manipulation
+
+# Git tools
+brew "git-mob"                    # Git mob programming
+
+# Other tools
+brew "pre-commit"                 # Git pre-commit hooks
+brew "watchman"                   # File watching service
+brew "yarn"                       # JS package manager
+
+# GUI Applications (Casks)
+cask "1password"                  # Password manager
+cask "1password-cli"              # 1Password CLI
+cask "ghostty"                    # Terminal emulator
+cask "dbeaver-community"          # Database GUI
+cask "vscodium"                   # Open-source VS Code
+
+# Fonts
+cask "font-fira-code"             # Programming font with ligatures
+cask "font-jetbrains-mono"        # JetBrains programming font
+
+# Optional - uncomment as needed
+# cask "google-chrome"            # Web browser
+# cask "firefox"                  # Alternative browser
+# cask "slack"                    # Team communication
+# cask "notion"                   # Notes and organization
+# cask "rectangle"                # Window manager
+# cask "ollama-app"               # Local LLM runner
+# brew "go"                       # Go language
+# brew "colima"                   # Docker runtime (alternative to Docker Desktop)
+# brew "lazygit"                  # Terminal UI for git
+# brew "lazydocker"               # Terminal UI for docker

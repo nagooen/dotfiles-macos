@@ -1,0 +1,9 @@
+\.git
+\.gitignore
+\.stow-local-ignore
+README\.md
+LICENSE
+setup\.sh
+install\.sh
+\.claude
+\.beads

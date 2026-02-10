@@ -1,15 +1,6 @@
 # dotfiles-macos
 
-Automated macOS development environment setup using symlinks.
-
-## Features
-
-- **Shell Configuration**: Zsh and Bash with aliases and custom functions
-- **Git Setup**: Global Git configuration and ignore patterns
-- **Vim Configuration**: Sensible Vim defaults and EditorConfig
-- **Claude Code Configuration**: AI-powered development workflow with specialized agents and skills
-- **Homebrew Packages**: Automated installation of development tools
-- **macOS Defaults**: Optimized system preferences for developers
+Automated macOS development environment setup using [GNU Stow](https://www.gnu.org/software/stow/).
 
 ## Quick Start
 
@@ -18,193 +9,97 @@ Automated macOS development environment setup using symlinks.
 git clone <your-repo-url> ~/projects/dotfiles-macos
 cd ~/projects/dotfiles-macos
 
-# Make install script executable
-chmod +x install.sh
+# Preview what will be linked
+./setup.sh --dry-run
 
-# Run installation
-./install.sh
+# Run setup
+./setup.sh
 ```
 
-## Installation Options
+## How It Works
 
-The install script provides an interactive menu:
+Each top-level directory is a **stow package**. The contents mirror your home directory structure. Running `stow <package>` creates symlinks from `$HOME` to the files in that package.
 
-1. **All** - Install everything (recommended for new machines)
-2. **Shell configurations only** - Just shell configs (.zshrc, .bashrc, aliases, functions)
-3. **Git configurations only** - Just Git config (.gitconfig, .gitignore_global)
-4. **Vim configurations only** - Just Vim config (.vimrc, .editorconfig)
-5. **Claude Code configurations only** - AI workflow configurations (agents, skills, commands)
-6. **Homebrew packages only** - Install packages from Brewfile
-7. **macOS defaults only** - Apply system preferences
+For example, `git/.gitconfig` becomes `~/.gitconfig`.
 
-## Directory Structure
+## Packages
 
-```
-dotfiles-macos/
-├── shell/              # Shell configurations
-│   ├── .zshrc
-│   ├── .bashrc
-│   ├── .aliases
-│   └── .functions
-├── git/                # Git configurations
-│   ├── .gitconfig
-│   └── .gitignore_global
-├── vim/                # Vim configurations
-│   ├── .vimrc
-│   └── .editorconfig
-├── claude/             # Claude Code AI configurations
-│   ├── agents/         # Specialized AI agents
-│   ├── skills/         # Reusable workflow patterns
-│   ├── commands/       # Custom CLI commands
-│   ├── notes/          # Project notes and context
-│   └── plans/          # Planning documents
-├── macos/              # macOS system preferences
-│   └── defaults.sh
-├── scripts/            # Additional utility scripts
-├── Brewfile            # Homebrew package definitions
-├── install.sh          # Installation script
-└── README.md           # This file
-```
+| Package | Contents | Description |
+|---------|----------|-------------|
+| `asdf` | `.tool-versions`, `.asdfrc` | Language version management |
+| `bash` | `.bashrc` | Bash shell configuration |
+| `brew` | `Brewfile` | Homebrew package definitions |
+| `ghostty` | `.config/ghostty/config` | Ghostty terminal emulator |
+| `git` | `.gitconfig`, `.gitignore_global`, `.gitmessage`, `.gitconfig.d/` | Git configuration with GPG signing and conditional includes |
+| `node` | `.npmrc`, `.default-npm-packages` | Node.js/npm configuration |
+| `rc` | `.ripgreprc`, `.hushlogin` | CLI tool configs |
+| `ruby` | `.gemrc`, `.irbrc`, `.pryrc`, `.default-gems`, `.rubocop.yml` | Ruby development environment |
+| `starship` | `.config/starship.toml` | Cross-shell prompt with git status |
+| `tmux` | `.config/tmux/tmux.conf`, themes | Terminal multiplexer with TokyoNight |
+| `vim` | `.vimrc`, `.editorconfig` | Vim editor configuration |
+| `zsh` | `.zshrc`, `.config/zsh/*.zsh` | Zsh with Oh My Zsh, aliases, functions, docker utils |
 
-## What Gets Installed
+### Non-Stow Directories
 
-### Shell Tools
-- Zsh with completions and enhancements
-- Useful aliases for git, navigation, and system commands
-- Custom functions for common tasks
+These directories are **not** stowed (they have `.stow-local-ignore` files):
 
-### Development Tools
-- Node.js, Python, Go
-- Version managers (nvm, asdf)
-- Git and GitHub CLI
-- Modern CLI tools (ripgrep, fzf, bat, exa)
-
-### GUI Applications
-- Visual Studio Code
-- iTerm2
-- Google Chrome
-- Programming fonts (Fira Code, JetBrains Mono)
-
-### macOS Tweaks
-- Fast keyboard repeat rate
-- Show hidden files in Finder
-- Enable tap to click
-- Disable auto-correct
-- And many more developer-friendly settings
-
-### Claude Code Configuration
-- **Specialized Agents**: AI agents for different development workflows
-  - `@codebase-explorer` - Deep code exploration and pattern discovery
-  - `@business-analyst` - Feature decomposition and planning
-  - `@full-stack-engineer` - Full-stack implementation with TDD
-  - `@qa-enforcer` - Quality verification before commits
-  - And more project-specific agents
-- **Skills**: Reusable workflow patterns
-  - `bug-fix` - Systematic bug fixing with Jira integration
-  - `tdd` - Test-driven development cycle
-  - `vertical-slice` - Feature slicing patterns
-  - `retro` - Retrospective workflow
-  - And more...
-- **Commands**: Custom CLI commands for planning and development workflows
-- **Best Practices**: TDD, clean code, SOLID principles integration
+| Directory | Purpose |
+|-----------|---------|
+| `claude/` | Claude Code AI workflow configs (special install via `install.sh`) |
+| `macos/` | macOS system preferences (`defaults.sh` - run manually) |
+| `scripts/` | Utility scripts |
 
 ## Customization
 
-### Shell
-Edit `shell/.aliases` and `shell/.functions` to add your own shortcuts.
+### Machine-specific overrides
 
-### Git
-Update your name and email in `git/.gitconfig`:
-```bash
-[user]
-    name = Your Name
-    email = your.email@example.com
-```
+These files are sourced if they exist but are **not** tracked in git:
 
-### Homebrew
-Add or remove packages in `Brewfile`. Then run:
-```bash
-brew bundle --file=~/projects/dotfiles-macos/Brewfile
-```
+- `~/.secrets` - API tokens, PATs (create manually, **never commit**)
+- `~/.zshrc.local` - Machine-specific Zsh config
+- `~/.bashrc.local` - Machine-specific Bash config
+- `~/.gitconfig.local` - Machine-specific Git config
 
-### macOS Defaults
-Edit `macos/defaults.sh` to customize system preferences. Apply changes:
-```bash
-bash ~/projects/dotfiles-macos/macos/defaults.sh
-```
+### Conditional Git config
 
-## Backups
+Git identity switches automatically based on repo location:
 
-Original files are automatically backed up to `~/.dotfiles_backup` with timestamps before being replaced.
+- `~/projects/personal/` - Uses personal email
+- `~/projects/mableit/` - Uses work email
 
-## Updating
+Edit `git/.gitconfig.d/personal` and `git/.gitconfig.d/work` to change.
 
-To update your dotfiles:
+## Managing Individual Packages
 
 ```bash
+# Stow a single package
 cd ~/projects/dotfiles-macos
-git pull origin main
+stow git
 
-# Re-run installation to update symlinks
-./install.sh
+# Unstow (remove symlinks)
+stow -D git
+
+# Re-stow (unstow then stow, useful after changes)
+stow -R git
+
+# Preview without applying
+stow -n -v git
 ```
 
-## Uninstalling
+## After Setup
 
-To remove symlinks and restore backups:
-
-```bash
-# Remove symlinks
-rm ~/.zshrc ~/.bashrc ~/.aliases ~/.functions
-rm ~/.gitconfig ~/.gitignore_global
-rm ~/.vimrc ~/.editorconfig
-
-# Restore from backup (adjust timestamp as needed)
-cp ~/.dotfiles_backup/* ~/
-```
-
-## New Machine Setup
-
-1. Install Xcode Command Line Tools:
-   ```bash
-   xcode-select --install
-   ```
-
-2. Clone this repository:
-   ```bash
-   git clone <your-repo-url> ~/projects/dotfiles-macos
-   ```
-
-3. Run the installation:
-   ```bash
-   cd ~/projects/dotfiles-macos
-   chmod +x install.sh
-   ./install.sh
-   ```
-
-4. Restart your terminal
-
-## Tips
-
-- Source your shell config after making changes: `source ~/.zshrc`
-- Keep your Brewfile updated: `brew bundle dump --file=~/projects/dotfiles-macos/Brewfile --force`
-- Review macOS defaults before applying them
-- Commit your customizations to version control
+1. Restart terminal or `source ~/.zshrc`
+2. Create `~/.secrets` for API tokens
+3. Install Homebrew packages: `brew bundle --file=~/projects/dotfiles-macos/brew/Brewfile`
+4. Apply macOS defaults: `bash ~/projects/dotfiles-macos/macos/defaults.sh`
+5. Install Tmux plugins: open tmux, press `<prefix> + I`
 
 ## Requirements
 
-- macOS (tested on Ventura and later)
-- Bash or Zsh
-- Internet connection for Homebrew installation
-
-## Contributing
-
-Feel free to customize this setup for your own needs!
+- macOS (Apple Silicon or Intel)
+- GNU Stow (`brew install stow`)
+- Git
 
 ## License
 
 MIT
-
-## Acknowledgments
-
-Inspired by dotfiles repositories from the community.

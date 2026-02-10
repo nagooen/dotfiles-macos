@@ -11,9 +11,16 @@
 # Backup files
 *.bak
 *.backup
+*.backup_*
 
-# Project-specific notes (keep personal notes out of version control)
+# Project-specific notes
 claude/notes/*-personal.md
+
+# Beads (local issue tracking)
+.beads/
+
+# TPM plugins (installed at runtime)
+tmux/.config/tmux/plugins/
 
 # Keep directory structure
 !.gitkeep

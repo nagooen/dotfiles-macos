@@ -14,10 +14,10 @@ shopt -s histappend
 PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # Source aliases if exists
-[[ -f ~/.aliases ]] && source ~/.aliases
+[[ -f ~/.config/zsh/aliases.zsh ]] && source ~/.config/zsh/aliases.zsh
 
 # Source functions if exists
-[[ -f ~/.functions ]] && source ~/.functions
+[[ -f ~/.config/zsh/functions.zsh ]] && source ~/.config/zsh/functions.zsh
 
 # Homebrew configuration
 if [[ -f /opt/homebrew/bin/brew ]]; then
@@ -29,11 +29,10 @@ if [ -f /opt/homebrew/etc/bash_completion ]; then
     . /opt/homebrew/etc/bash_completion
 fi
 
-# Load version managers if they exist
 # asdf
-[[ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]] && . /opt/homebrew/opt/asdf/libexec/asdf.sh
+export PATH=$HOME/.asdf/shims:$PATH
 
-# nvm
+# NVM
 export NVM_DIR="$HOME/.nvm"
 [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && \. "/opt/homebrew/opt/nvm/nvm.sh"
 [[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ]] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
@@ -41,5 +40,8 @@ export NVM_DIR="$HOME/.nvm"
 # Add local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
 
-# Project-specific configurations
-# Add your custom configurations below
+# Source secrets
+[[ -f ~/.secrets ]] && source ~/.secrets
+
+# Local overrides
+[[ -f ~/.bashrc.local ]] && source ~/.bashrc.local

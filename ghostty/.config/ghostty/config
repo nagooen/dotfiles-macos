@@ -1,0 +1,35 @@
+# https://ghostty.org/docs/config/reference
+
+theme = TokyoNight Moon
+
+# Font settings
+# List available fonts: ghostty +list-fonts
+font-family = Comic Code Ligatures
+font-size = 16
+adjust-cell-height = 6
+
+# Cursor settings
+cursor-style = block
+shell-integration-features = no-cursor
+
+# Window settings
+window-padding-x = 7
+window-padding-y = 7
+window-width = 140
+window-height = 35
+window-save-state = always
+
+# Split navigation
+keybind = ctrl+shift+k=goto_split:top
+keybind = ctrl+shift+j=goto_split:bottom
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+l=goto_split:right
+
+# Split resizing
+keybind = super+ctrl+down=resize_split:down,100
+keybind = super+ctrl+left=resize_split:left,100
+keybind = super+ctrl+up=resize_split:up,100
+keybind = super+ctrl+right=resize_split:right,100
+
+# Reload config
+keybind = super+shift+comma=reload_config
