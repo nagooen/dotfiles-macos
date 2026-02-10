@@ -8,13 +8,99 @@ Claude Code is an AI-powered CLI assistant that helps with software development 
 
 ## Installation
 
-The Claude configuration is installed to `~/.claude/` on your system. This makes it available globally for all your projects.
+The Claude configuration is **symlinked** to `~/.claude/` on your system. This means changes in either location are automatically reflected in both places.
 
 ```bash
 # Install using the dotfiles install script
 ./install.sh
 # Then select option 5 (Claude Code configurations only)
 # Or option 1 (All) to install everything
+```
+
+## Symlink Architecture
+
+Only **configuration files** are symlinked. Local state directories are left alone.
+
+**Symlinked (version controlled):**
+```
+~/.claude/
+├── CLAUDE.md              → dotfiles/claude/CLAUDE.md
+├── CONFIGURATION-GUIDE.md → dotfiles/claude/CONFIGURATION-GUIDE.md
+├── README.md              → dotfiles/claude/README.md
+├── settings.json          → dotfiles/claude/settings.json
+├── statusline-command.sh  → dotfiles/claude/statusline-command.sh
+├── mcp.json               → dotfiles/claude/mcp.json
+├── agents/                → dotfiles/claude/agents/
+└── skills/                → dotfiles/claude/skills/ (3 personal skills)
+```
+
+**NOT symlinked (local state):**
+```
+~/.claude/
+├── cache/              # Plugin cache
+├── debug/              # Debug logs
+├── file-history/       # File change history
+├── history.jsonl       # Conversation history
+├── ide/                # IDE integration state
+├── memory/             # Local plans storage
+├── paste-cache/        # Clipboard cache
+├── plugins/            # Installed plugins
+├── projects/           # Project-specific state
+├── session-env/        # Session environment
+├── settings.local.json # Local overrides (not committed)
+├── shell-snapshots/    # Shell state snapshots
+├── stats-cache.json    # Statistics cache
+├── statsig/            # Feature flags
+├── tasks/              # Task state
+├── telemetry/          # Usage telemetry
+└── todos/              # Todo items
+```
+
+## Migration from Copy to Symlink
+
+If you previously used the copy-based install and want to migrate to symlinks:
+
+```bash
+# 1. Backup your current ~/.claude config
+cp ~/.claude/CLAUDE.md ~/CLAUDE.md.backup
+cp ~/.claude/settings.json ~/settings.json.backup
+
+# 2. Sync any changes you want to keep to the dotfiles repo
+cp ~/.claude/CLAUDE.md /path/to/dotfiles-macos/claude/
+cp ~/.claude/settings.json /path/to/dotfiles-macos/claude/
+cp ~/.claude/statusline-command.sh /path/to/dotfiles-macos/claude/
+cp ~/.claude/mcp.json /path/to/dotfiles-macos/claude/
+
+# 3. Remove the old files (NOT the directories with local state)
+rm ~/.claude/CLAUDE.md
+rm ~/.claude/settings.json
+rm ~/.claude/statusline-command.sh
+rm ~/.claude/mcp.json
+rm -rf ~/.claude/agents
+rm -rf ~/.claude/skills
+
+# 4. Run the install script to create symlinks
+./install.sh  # Select option 5
+
+# 5. Verify symlinks
+ls -la ~/.claude/CLAUDE.md  # Should show -> dotfiles/claude/CLAUDE.md
+```
+
+## Editing Configuration
+
+Since configs are symlinked, you can edit in either location:
+
+```bash
+# Edit in ~/.claude (changes appear in dotfiles repo)
+vim ~/.claude/CLAUDE.md
+
+# Edit in dotfiles repo (changes appear in ~/.claude)
+vim ~/projects/dotfiles-macos/claude/CLAUDE.md
+
+# Commit changes to git
+cd ~/projects/dotfiles-macos
+git add claude/
+git commit -m "Update Claude config"
 ```
 
 ## What's Included
@@ -35,16 +121,11 @@ Plus project-specific agents for different services.
 
 ### 🎯 Skills (`~/.claude/skills/`)
 
-Reusable workflow patterns:
+Personal workflow skills (3). Other skills are provided by the Attain Plugin Marketplace.
 
-- **bug-fix** - Complete bug fixing workflow with Jira integration
-- **tdd** - RED-GREEN-REFACTOR test-driven development cycle
-- **vertical-slice** - Feature slicing patterns (<300 lines per PR)
-- **acceptance-criteria** - GIVEN-WHEN-THEN format for testable AC
-- **pr-size-check** - Automated gate to ensure reviewable PRs
 - **retro** - Mini retrospective for continuous improvement
-- **skill-maker** - Creating new skills and making them source of truth
 - **root-cause-analysis** - Systematic investigation for complex bugs
+- **terraform-research-patterns** - Terraform provider research patterns
 
 ### ⚙️ Commands (`~/.claude/commands/`)
 

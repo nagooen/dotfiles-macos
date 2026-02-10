@@ -1,8 +1,43 @@
-# Development Workflow Guide
-
-This guide defines the development workflow, quality standards, and best practices for Claude Code assistance across all projects in this repository.
+# Global Claude Code Configuration
 
 **User Preference:** Always refer to the user as **El Jefe**.
+
+---
+
+## AI Agent Workflow Rules
+
+### Planning Before Implementation
+
+- NEVER start editing, creating, or deleting source files until the user explicitly approves a plan.
+- When asked to review, summarise, or plan, provide ONLY the analysis/summary/plan first.
+- Wait for explicit approval ("go ahead", "approved", "implement it") before making any code changes.
+- Change only what is asked. Do not proactively fix, refactor, or improve surrounding code.
+
+### PR Review Workflow
+
+- When asked to review PR comments or summarise PR feedback:
+  1. First provide ONLY a numbered summary grouped by: must-fix, suggestion, and nit.
+  2. Wait for the user to confirm which items to address.
+  3. Only then implement the agreed-upon fixes.
+- Do NOT auto-commit or auto-push unless explicitly asked.
+
+### Naming Conventions
+
+- When creating or renaming components within a feature directory, use the FULL path-based prefix matching sibling components. Check existing sibling component selectors and file names for the naming pattern before proposing names.
+
+### CSS/SCSS Variables
+
+- Always verify CSS variable names against the project's actual variable definitions before using them (e.g., check the source file for exact names — do NOT guess prefixes like `--color-grey-400` when the actual name is `--grey-400`).
+
+### Codebase Navigation
+
+- When a codebase has separate flows for different user roles (e.g., client-side vs worker-side), always confirm which side is relevant before proposing changes. Explore sibling directories to understand the boundary.
+
+### Git Operations
+
+- Before pushing, always check if the remote branch has newer commits and rebase if needed.
+- If a commit fails with a GPG signing error, retry with `--no-gpg-sign`.
+- Never force push without explicit user permission.
 
 ---
 
@@ -55,301 +90,584 @@ When spawning Task agents, specify the model parameter:
 
 ---
 
-## Bug Fixes
-
-**CRITICAL RULE:** When a bug is identified, **ALWAYS create a Jira ticket FIRST** before implementing any fix.
-
-**Use the bug-fix skill:**
-```
-bug-fix: <brief bug description>
-```
-
-The skill handles the complete workflow: Jira ticket creation/fetching, branch creation, TDD implementation, quality verification, and Jira updates.
-
-**See:** `.claude/skills/bug-fix.md` for the complete workflow, Jira requirements, and examples.
+This configuration uses the **Attain Plugin Marketplace** as the primary source for development workflows, skills, and agents.
 
 ---
 
-## Skills System
+## Configuration Architecture
 
-Skills are reusable workflow instructions stored in `.claude/skills/`. They provide specialized guidance for specific tasks and serve as the single source of truth.
+### Primary: Attain Plugin Marketplace
 
-**Available Skills:**
-- `vertical-slice` - Define small, reviewable slices (<300 lines per PR)
-- `acceptance-criteria` - Standard GIVEN-WHEN-THEN format for testable AC (3-5 max per story)
-- `pr-size-check` - Automated gate to ensure PRs are reviewable before creation
-- `tdd` - RED-GREEN-REFACTOR cycle for test-driven development
-- `bug-fix` - Complete bug fixing workflow with Jira integration
-- `root-cause-analysis` - Systematic investigation for complex or recurring bugs (user-invoked)
-- `retro` - Mini retrospective to identify improvements and create skills
-- `skill-maker` - Creating new skills and making them the source of truth
+The **attain-plugin-marketplace** provides a comprehensive plugin system with:
 
-**Creating New Skills:**
-When you need to document a workflow or reduce duplication, use the skill-maker skill:
+- **25+ Foundation Skills** - Code quality, architecture, testing, security
+- **Specialized Agents** - Senior engineer, code quality guardian, review coordinator
+- **Automated Commands** - `/start-ticket`, `/review-pr`, `/plan-feature`
+- **Composition System** - Agents dynamically compose with skills based on context
+- **Version Control** - Plugin update system with dependency management
+
+**Installed Plugins:**
 ```
-skill-maker: create a skill for [purpose]
+core@attain-plugin-marketplace                    # 25 foundation skills
+developer-workflow@attain-plugin-marketplace      # Dev agents & commands
+review-swarm@attain-plugin-marketplace            # Dynamic code review
+planning-workflow@attain-plugin-marketplace       # Feature planning workflow
 ```
 
-The skill-maker ensures skills become the source of truth by removing duplication from CLAUDE.md, updating agents, and handling git commits.
+See `attain-plugin-marketplace/CLAUDE.md` for complete documentation.
+
+### Supplemental: Global Skills (~/.claude/skills/)
+
+Three supplemental skills are maintained at the global level for personal workflow optimization:
+
+1. **retro** - Mini retrospective to identify improvements
+2. **root-cause-analysis** - Systematic investigation for complex bugs
+3. **terraform-research-patterns** - Terraform provider research patterns
+
+**Note:** These skills have also been migrated to `attain-plugin-marketplace/core/skills/` for consistency.
 
 ---
 
-## Continuous Improvement
+## Available Resources
 
-**PROACTIVE RULE:** After completing any work (PR merge, bug fix, feature delivery), **ALWAYS ask the user** if they want to run a retrospective.
+### Core Skills (via Plugin Marketplace)
 
-**Use the retro skill:**
-```
-retro: <optional context about what was completed>
-```
+**Development & Testing:**
+- `tdd` - RED-GREEN-REFACTOR cycle (Foundation, Level 0)
+- `bug-fix` - Complete bug fixing workflow with Jira (Workflow, Level 2)
+- `clean-code` - Naming, functions, comments, DRY/KISS/YAGNI
+- `vertical-slice` - Feature slicing patterns (<300 lines per PR)
+- `acceptance-criteria` - GIVEN-WHEN-THEN format for testable AC
+- `pr-size-check` - Ensure PRs are reviewable before creation
 
-The skill analyzes what went well, what could improve, identifies skill opportunities, and generates actionable improvements. It helps continuously improve the development process by catching patterns that slow us down and codifying practices that work well.
+**Architecture & Design:**
+- `solid-principles` - SRP, OCP, LSP, ISP, DIP analysis
+- `hexagonal-architecture` - Ports & Adapters pattern
+- `plan-simplifier` - Simplify over-engineered plans
 
-**Automatic triggers:**
+**Code Quality & Review:**
+- `bugs-edge-cases` - Common programming errors, edge cases
+- `test-coverage` - Missing tests, weak assertions
+- `security` - OWASP Top 10, authentication, injection attacks
+- `performance` - N+1 queries, inefficient patterns
+- `sre-concerns` - Fault tolerance, retries, circuit breakers
+
+**Tech Stack Specifics:**
+- `angular` - Angular conventions
+- `elixir-phoenix` - Elixir/Phoenix patterns
+- `react-native` - React Native conventions
+- `ruby-rails` - Ruby on Rails with composition over metaprogramming
+- `typescript` - TypeScript strict typing patterns
+- `vite-react` - Vite + React with Atomic Design
+- `oban-patterns` - Best practices for Oban background jobs
+- `openapi-validation` - OpenAPI schema validation patterns
+
+**Project Standards:**
+- `sensible-defaults` - Org-wide engineering standards
+- `quality-plan` - Front-load review concerns at ticket start
+- `skill-maker` - Create new skills following quality standards
+
+### Agents (via Plugin Marketplace)
+
+**Development:**
+- `@senior-clean-code-engineer` - Implement features with TDD + clean architecture
+- `@code-quality-guardian` - Review code before commits (auto-detects tech stack)
+
+**Planning:**
+- `@product-manager` - PRD creation through guided Q&A
+- `@architect` - Technical feasibility, ADRs, infrastructure planning
+- `@test-strategist` - Test strategy and coverage targets
+- `@epic-lead` - Synthesize PRD + architecture into vertical slices
+
+**Review:**
+- `@review-coordinator` - Orchestrate dynamic code review (1-10 agents based on complexity)
+- `@qa-enforcer` - Execute focused code reviews with specific skill assignments
+
+**Discovery:**
+- `@codebase-explorer` - Deep pattern discovery and context analysis
+- `@business-analyst` - Break features into slices and TDD cycles
+
+### Commands (via Plugin Marketplace)
+
+**Development Workflow:**
+- `/start-ticket` - Complete workflow from Jira ticket to PR
+- `/bug-fix` - Guided bug fix workflow with TDD
+
+**Planning:**
+- `/plan-feature` - PRD → Architecture + Test Strategy → Vertical Slices → Jira
+
+**Review:**
+- `/review-pr` - Dynamic parallel code review with 1-10 specialized agents
+
+---
+
+## Supplemental Global Skills
+
+These skills are available globally for personal workflow needs:
+
+### retro
+**Purpose:** Mini retrospective to identify improvements and create skills
+
+**When to use:**
 - After PR merged to main
 - After bug fix completed
 - After feature slice delivered
 - After major milestone reached
 
----
-
-## Claude Code Workflow & Best Practices
-
-### Five-Phase Workflow (Based on Anthropic Best Practices)
-
-This project implements all 5 Claude Code workflows from https://www.anthropic.com/engineering/claude-code-best-practices
-
-#### **Phase 1: EXPLORE (Q&A + Context Discovery)**
-**Purpose:** Understand codebase before writing any code
-
-**Activities:**
-- Ask exploratory questions about existing patterns
-- Use `@codebase-explorer` subagent for complex searches
-- Read relevant files to understand structure
-- Identify dependencies and integration points
-
-**Example Questions:**
-- "What's the existing pattern for database schemas in this project?"
-- "How are API endpoints structured and documented?"
-- "What testing patterns are used for integration tests?"
-
-**Tools:**
-- Q&A mode for specific questions
-- Subagent: `@codebase-explorer` for multi-file pattern searches
-- File reads to understand existing code
-
----
-
-#### **Phase 2: PLAN (Break into Vertical Slices + TDD Cycles)**
-**Purpose:** Create actionable implementation plan before coding
-
-**Activities:**
-- Decompose feature into deployable vertical slices (<300 lines each)
-- Identify TDD cycles within each slice (typically 3-7 cycles per slice)
-- Map backend → frontend dependencies
-- Estimate test count and coverage impact
-
-**If unclear about slicing:** Invoke `vertical-slice` skill for size constraints and splitting patterns.
-
-**Example Plan Structure:**
+**Invocation:**
 ```
-Vertical Slice: [Feature Name] - [Component/Layer]
-
-TDD Cycles:
-1. Database schema with required fields
-2. Data validation and business logic
-3. Create/update operations
-4. Read/query operations
-5. API endpoint implementation
-6. Integration tests
-7. API documentation
-
-Estimated: 15-20 tests, 100% coverage (new code)
+retro: [optional context about what was completed]
 ```
 
-**Tools:**
-- TodoWrite tool to track TDD cycles
-- Subagent: `@business-analyst` to break down complex features
+**What it does:**
+- Reviews work completed in conversation
+- Identifies pain points and successes
+- Recommends skill opportunities
+- Suggests user workflow improvements
+- Creates skills via `skill-maker`
+
+### root-cause-analysis
+**Purpose:** Systematic investigation for complex or recurring bugs
+
+**When to use:**
+- Bug is complex with unclear cause
+- Same type of bug has occurred before
+- User explicitly requests RCA
+- Bug has significant impact
+
+**Invocation:**
+```
+root-cause-analysis: <bug description>
+```
+
+**What it does:**
+- Gathers initial information
+- Reproduces the bug
+- Uses Five Whys methodology
+- Documents root cause and prevention
+
+### terraform-research-patterns
+**Purpose:** Research Terraform provider attributes when docs are inaccessible
+
+**When to use:**
+- Terraform validation errors
+- WebFetch fails on Terraform Registry
+- Need to understand resource schema
+- Converting API docs to Terraform config
+
+**Invocation:**
+```
+terraform-research-patterns: help find [provider] [resource] [attribute]
+```
+
+**What it does:**
+- Searches provider GitHub for schema
+- Finds examples in provider repository
+- Checks local codebase patterns
+- Maps API documentation to Terraform HCL
 
 ---
 
-#### **Phase 3: CODE (TDD Red-Green-Refactor)**
-**Purpose:** Implement with test-first approach, always stay green
+## How This Works
 
-**Critical Constraints:**
-- ✅ **NEVER commit broken tests** - always stay green
-- ✅ **Option C**: Claude runs full RED→GREEN→REFACTOR cycle autonomously
-- ✅ User reviews when everything is green
+### Configuration Hierarchy
 
-**Each TDD Cycle (Micro-workflow):**
+1. **Plugin Marketplace** (Primary) - Comprehensive development system
+2. **Global ~/.claude/** (Supplemental) - Personal workflow skills
+3. **Organization .claude/** (Optional) - Org-specific agents and context
+4. **Project .claude/** (Optional) - Project tech stack and permissions
+
+### Skill Resolution
+
+When a skill is invoked:
+1. Check if skill exists in plugin marketplace (e.g., `core@attain-plugin-marketplace/skills/tdd`)
+2. If not found, check global `~/.claude/skills/`
+3. If not found, check organization `.claude/skills/`
+4. If not found, report skill not found
+
+### Agent Resolution
+
+When an agent is invoked (e.g., `@senior-clean-code-engineer`):
+1. Check if agent exists in plugin marketplace
+2. If not found, check organization `.claude/agents/`
+3. If not found, check global `~/.claude/agents/`
+4. If not found, report agent not found
+
+---
+
+## Plugin Management
+
+### Install Plugin
+
 ```bash
-# RED: Write failing test
-[run test command]           # Verify fails with clear error
+# Add marketplace (one-time)
+/plugin marketplace add /path/to/attain-plugin-marketplace
 
-# GREEN: Write minimal implementation
-[run test command]           # Verify passes
-
-# REFACTOR: Improve code quality while keeping tests green
-# Run linting and formatting
-[run full test suite]        # Verify all tests still pass
+# Install plugins
+/plugin install core@attain-plugin-marketplace
+/plugin install developer-workflow@attain-plugin-marketplace
+/plugin install review-swarm@attain-plugin-marketplace
+/plugin install planning-workflow@attain-plugin-marketplace
 ```
 
-**Quality Checks During Refactor:**
-- Run linting and formatting tools
-- Run tests after EVERY refactor change
-- Extract functions if complexity > 10
-- Rename variables for clarity
-- Remove duplication
+### List Installed Plugins
 
-**Multiple Cycles Per Slice:**
-- Each slice has 3-7 TDD cycles
-- Complete all cycles before moving to next slice
-- User commits when entire slice is green and verified
+```bash
+/plugin list
+```
 
-**Tools:**
-- TodoWrite to track RED/GREEN/REFACTOR phases
-- Subagent: `@full-stack-engineer` (PRIMARY - complete vertical slices across DB+Backend+Frontend)
-- Fallback: `@backend-engineer` (backend-only refactoring) or `@frontend-engineer` (frontend-only refactoring)
+### Update Plugin
+
+```bash
+/plugin update core@attain-plugin-marketplace
+```
 
 ---
 
-#### **Phase 4: VERIFY (Quality Gates + Coverage)**
-**Purpose:** Ensure code meets all quality standards before commit
+## Benefits of This Architecture
 
-**What to Check:**
-- ✅ All tests pass (green)
-- ✅ No linting errors (strict mode)
-- ✅ No type errors (strict type checking)
-- ✅ ≥90% code coverage
-- ✅ Test suite completes quickly (<60 seconds target)
-- ✅ No unused variables, no loose types
-- ✅ Max complexity ≤10, max nesting ≤3
-
-**Tools:**
-- Subagent: `@qa-enforcer` for comprehensive quality verification
+✅ **Comprehensive** - 25+ skills + specialized agents vs 9 basic skills
+✅ **Composition** - Agents dynamically compose with skills
+✅ **Automation** - Commands like `/start-ticket` automate workflows
+✅ **Tech Stack Support** - 6 framework-specific skills
+✅ **Versioned** - Plugin update system with dependencies
+✅ **Extensible** - Create new plugins for teams/orgs
+✅ **Professional** - Industry-standard patterns (SOLID, clean code, TDD)
 
 ---
 
-#### **Phase 5: COMMIT (User Approval + Documentation)**
-**Purpose:** User reviews and commits when slice is complete
+## Documentation
 
-**Commit Workflow:**
-1. Claude presents green code for user review
-2. User verifies implementation matches requirements
-3. User decides when to commit (never automatic)
-4. Claude creates detailed commit message following project conventions
+**Plugin Marketplace:**
+- Main: `attain-plugin-marketplace/CLAUDE.md`
+- Core Skills: `attain-plugin-marketplace/core/skills/README.md`
+- Developer Workflow: `attain-plugin-marketplace/developer-workflow/README.md`
+- Review Swarm: `attain-plugin-marketplace/review-swarm/CLAUDE.md`
+- Planning Workflow: `attain-plugin-marketplace/planning-workflow/README.md`
 
-**Commit Message Format:**
-```
-<type>: <short description>
-
-<detailed explanation of what changed and why>
-
-Technical details:
-- Specific changes made
-- Design decisions
-- Testing approach
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
-
-**Git Workflow:**
-- Feature branches: `feature/feature-name`
-- Bug fixes: `fix/bug-description`
-- Main branch: `main`
-- Never commit without user approval
+**Global Config:**
+- This file: `~/.claude/CLAUDE.md`
+- Global README: `~/.claude/README.md`
+- Global agents: `~/.claude/agents/README.md`
 
 ---
 
-### **Specialized Subagents**
+## Documentation Storage Convention
 
-This project uses 5 specialized subagents to support the 5-phase workflow. Each agent has specific capabilities and constraints documented in `.claude/agents/`.
+**IMPORTANT:** Plans are stored at the **user level** (`~/.claude/memory/plans/`) organised by project. This keeps plans accessible across sessions and separates them from repository code.
 
-| Agent | Phase | Purpose |
-|-------|-------|---------|
-| `@codebase-explorer` | EXPLORE | Deep codebase pattern discovery and context analysis |
-| `@business-analyst` | PLAN | Break features into vertical slices and TDD cycles |
-| `@full-stack-engineer` | CODE (All Layers) ⭐ | Execute complete vertical slices from database to UI in single conversation |
-| `@backend-engineer` | CODE (Backend Only) | Backend-only refactoring and fixes |
-| `@frontend-engineer` | CODE (Frontend Only) | Frontend-only refactoring and fixes |
-| `@qa-enforcer` | VERIFY | Comprehensive quality verification before commit |
+### Folder Structure (User-Level)
 
-**Usage Examples:**
 ```
-@codebase-explorer find all database query patterns in the codebase
-@business-analyst break down 'User authentication' feature into vertical slices
-@full-stack-engineer implement user login vertical slice with TDD (DB + API + UI)
-@backend-engineer refactor authentication context to extract validation logic
-@frontend-engineer refactor form component to use composition pattern
-@qa-enforcer check if code is ready to commit
+~/.claude/
+├── memory/
+│   └── plans/
+│       ├── web-frontend/                    # Project-specific plans
+│       │   ├── ES-50845-agreement-terms-implementation-plan-v2.md
+│       │   ├── ES-51283-mobile-time-selector-fix.md
+│       │   └── ES-51285-name-hours-fixes.md
+│       ├── better-caring/                   # Another project
+│       │   └── ES-xxxxx-*.md
+│       ├── attain-plugin-marketplace/       # Plugin/tooling plans
+│       │   └── plan-simplifier-analysis.md
+│       └── global/                          # Non-project plans
+│           ├── mcp-server-setup.md
+│           └── skill-creation.md
+├── settings.json                            # Global settings
+└── CLAUDE.md                                # This file
 ```
 
-**See:** `.claude/agents/README.md` for complete documentation and workflow.
+### Storage Guidelines
+
+**Plans (~/.claude/memory/plans/<project>/):**
+- Format: `[TICKET-KEY]-[description].md` or `[descriptive-name].md`
+- Created by: `/start-ticket` command or manual planning
+- Purpose: Reference during implementation and PR review
+- Lifecycle: Kept until no longer needed (manual cleanup)
+- Access: `Read` tool with path `~/.claude/memory/plans/<project>/[filename].md`
+
+**Project Context (repository .claude/notes/):**
+- Format: `[topic].md` or `YYYY-MM-DD-[decision].md`
+- Created by: Manual or agent-driven context capture
+- Purpose: Project-specific context, decisions, patterns
+- Lifecycle: Permanent - committed to git
+- Access: `Read` tool with path `<repo>/.claude/notes/[filename].md`
+
+**Retrospectives (repository .claude/retros/):**
+- Format: `YYYY-MM-DD-[topic].md`
+- Created by: `retro` skill after work completion
+- Purpose: Document learnings and improvements
+- Lifecycle: Permanent - committed to git for team reference
+
+### Why User-Level Plans?
+
+✅ **Persistence:** Plans survive branch switches and repo changes
+✅ **Cross-Session:** Accessible across Claude Code sessions
+✅ **Organisation:** Grouped by project for easy discovery
+✅ **No Git Noise:** Plans don't clutter repository history
+✅ **Privacy:** Personal working documents stay local
+
+### Referencing Plans
+
+When implementing a ticket, reference the saved plan:
+
+```markdown
+# Read the plan
+Read: ~/.claude/memory/plans/web-frontend/ES-12345-implementation-plan.md
+
+# Verify alignment
+- Check: Am I following the approved approach?
+- Check: Have I completed the quality checkpoints?
+- Check: Have I implemented the planned test scenarios?
+```
+
+### Repository .claude/ Directory
+
+Repository-level `.claude/` is still used for:
+- `CLAUDE.md` - Project-specific coding guidelines
+- `settings.local.json` - Project permissions
+- `notes/` - Team-shared context (committed to git)
+- `retros/` - Team retrospectives (committed to git)
+
+**DO commit:**
+- `.claude/notes/` - Project context
+- `.claude/retros/` - Team learnings
+- `.claude/CLAUDE.md` - Project guidance
 
 ---
 
-### **Prompting Strategy**
-- Use stack-specific prefixes when applicable: `[Backend]` or `[Frontend]`
-- One vertical slice per conversation (complete feature end-to-end)
-- Be specific: "Implement slice 1: User authentication following TDD"
-- Course-correct early if Claude goes off track
-- Invoke subagents with `@agent-name` for specialized tasks
+## Beads Issue Tracking
 
-### TDD Workflow with Claude (Option C)
-**Claude runs full cycle, you review at GREEN:**
+**Beads** is a local-first issue tracking system used for personal task management during development.
 
-```
-1. RED Phase (Claude):
-   - Writes failing test first
-   - Runs test to confirm failure
-   - Shows you the failing test output
+### Critical Rule
 
-2. GREEN Phase (Claude):
-   - Writes minimal code to pass
-   - Runs test to confirm pass
-   - Shows you passing test output
+**NEVER commit `.beads/` to remote branches.** Beads is for local tracking only.
 
-3. REFACTOR Phase (Claude):
-   - Improves code quality
-   - Keeps tests green
-   - Runs full suite to confirm <60s
+### Setup (Per Repository)
 
-4. REVIEW (You):
-   - Review implementation
-   - Approve or request changes
-   - Commit when slice is complete
+```bash
+# 1. Add to local git exclude (not .gitignore - keeps it personal)
+echo ".beads/" >> .git/info/exclude
+
+# 2. Configure sync branch (optional - for local backup)
+bd config set sync-branch beads-sync
+
+# 3. Set issue prefix
+bd config set issue-prefix <project-name>
 ```
 
-**Key Rules:**
-- Claude NEVER skips to "full implementation" without tests
-- Each cycle must show test output (RED → GREEN)
-- Tests must pass before refactor
-- Full suite must stay under 60 seconds
+### Common Commands
+
+```bash
+bd create "Issue title" --type task     # Create issue
+bd list                                  # List open issues
+bd show <id>                             # View issue details
+bd update <id> --status in_progress     # Update status
+bd close <id>                            # Close issue
+bd sync --full --no-push                 # Sync locally (never push)
+```
+
+### What NOT To Do
+
+- ❌ `bd sync --full` (without `--no-push`) - pushes to remote
+- ❌ `git add .beads/` - stages beads files
+- ❌ Remove `.beads/` from `.git/info/exclude`
+
+### Integration with Jira
+
+Beads is for **personal task breakdown** during implementation. The source of truth for tickets remains Jira. Use beads to:
+- Break down Jira tickets into smaller tasks
+- Track personal progress
+- Manage local TODO items
 
 ---
 
-## Documentation Structure
+## Development Workflow
 
-**AI-focused (this directory):**
-- `.claude/CLAUDE.md` - This file (AI workflow, agents, standards)
-- `.claude/agents/` - Specialized subagent configurations
-- `.claude/skills/` - Reusable workflow skills (bug-fix, tdd, skill-maker)
-- `.claude/notes/` - Project-specific context and decisions
+This is El Jefe's integrated workflow combining Attain plugins, Beads context management, and persistent plan storage.
 
-**Project-specific documentation:**
-- Refer to individual project README files for tech stack details
-- Check project-specific docs/ folders for implementation patterns
-- Consult test files to understand testing conventions
+### Overview
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  /start-ticket  │ ──► │  Beads Context  │ ──► │  Memory Plans   │
+│  (Attain)       │     │  Management     │     │  (Persistent)   │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+      Jira               Local Tracking          ~/.claude/memory/
+```
+
+### Phase 1: Start Ticket (Attain Plugin)
+
+Use `/start-ticket` to begin work on a Jira ticket:
+
+```bash
+/start-ticket ES-12345
+```
+
+This will:
+1. Fetch ticket details from Jira
+2. Generate an implementation plan
+3. **APPROVAL GATE** - Wait for El Jefe's approval
+4. Save plan to `~/.claude/memory/plans/<project>/ES-12345-*.md`
+
+### Phase 2: Context Management (Beads)
+
+Once the plan is approved, break down work into trackable beads:
+
+```bash
+# Create beads for each implementation task
+bd create --title="Implement API endpoint" --type=task --priority=2
+bd create --title="Add unit tests" --type=task --priority=2
+bd create --title="Update documentation" --type=task --priority=3
+
+# Set dependencies
+bd dep add <tests-id> <api-id>  # Tests depend on API
+
+# Start working
+bd ready                         # See what's available
+bd update <id> --status=in_progress
+```
+
+**Why Beads for Context:**
+- Survives conversation compaction (`bd prime` recovers context)
+- Tracks progress across multiple sessions
+- Dependencies prevent working on blocked items
+- Local-only - doesn't pollute git history
+
+### Phase 3: Plan Updates (Memory Layer)
+
+As implementation progresses, update the plan in the memory layer:
+
+```bash
+# Plans are stored here:
+~/.claude/memory/plans/<project>/ES-12345-implementation-plan.md
+```
+
+**When to Update Plans:**
+- Requirements clarified during implementation
+- Technical approach changed
+- New edge cases discovered
+- Scope adjusted
+
+**Plan Update Workflow:**
+1. Read current plan: `Read ~/.claude/memory/plans/<project>/ES-12345-*.md`
+2. Make updates to reflect reality
+3. Continue implementation aligned with updated plan
+
+### Phase 4: PR Created (Awaiting Review)
+
+After PR is created, update beads with PR link but **DO NOT close**:
+
+```bash
+# Update beads with PR link (keep in_progress)
+bd update <id> --notes="PR created: <PR_URL>"
+
+# Export beads state
+bd sync --flush-only
+```
+
+**IMPORTANT:** Do NOT close beads issues until the PR has been merged. The issue stays `in_progress` during code review.
+
+### Phase 5: PR Merged (Completion)
+
+Only close beads after PR is merged:
+
+```bash
+# Verify PR is merged first
+gh pr view <PR_NUMBER> --json state
+
+# If merged, close beads
+bd close <id1> <id2> <id3> --reason="PR merged: <PR_URL>"
+
+# Export final state
+bd sync --flush-only
+
+# Optional: Run retrospective
+retro: completed ES-12345 implementation
+```
+
+### Workflow Commands Summary
+
+| Phase | Tool | Command |
+|-------|------|---------|
+| Start | Attain | `/start-ticket ES-12345` |
+| Plan | Memory | `Read ~/.claude/memory/plans/<project>/...` |
+| Track | Beads | `bd create`, `bd ready`, `bd update` |
+| Progress | Beads | `bd list --status=in_progress` |
+| Update Plan | Memory | Edit plan file in memory layer |
+| PR Created | Beads | `bd update <id> --notes="PR: <URL>"` |
+| PR Merged | Beads | `bd close <ids>`, `bd sync --flush-only` |
+| Review | Attain | `/review-pr` |
+
+### Context Recovery
+
+After conversation compaction or new session:
+
+```bash
+bd prime                    # Recover beads context (auto-runs via hooks)
+bd ready                    # See available work
+bd show <id>                # Get full context on a task
+```
+
+Then read the plan:
+```
+Read ~/.claude/memory/plans/<project>/ES-12345-implementation-plan.md
+```
+
+### Key Principles
+
+1. **Jira is source of truth** for tickets - Attain fetches from there
+2. **Beads is local context** - Never commit, survives compaction
+3. **Memory layer is persistent plans** - User-level, cross-session
+4. **Plans evolve** - Update as understanding improves
 
 ---
 
-## Related Global Instructions
+## Quickstart
 
-**See:** `~/.claude/CLAUDE.md` for:
-- TDD RED-GREEN-REFACTOR cycle details
-- Git commit workflow
-- Code quality principles (SOLID, coupling, cohesion)
-- Never commit as Claude co-author
-- Never commit to git without asking user
+**For development work:**
+```bash
+/start-ticket ES-12345
+# Workflow: Jira fetch → plan generation → APPROVAL GATE → branch → implementation → PR
+# Plan saved to: .claude/plans/ES-12345-implementation-plan.md (and optionally Jira)
+```
+
+**For code review:**
+```bash
+/review-pr
+# Dynamically allocates 1-10 specialized QA agents based on PR complexity
+```
+
+**For feature planning:**
+```bash
+/plan-feature https://attainhealthtech.atlassian.net/browse/ES-12345
+# Creates: PRD → ADRs + Test Plan → Vertical Slices → Jira Epic + Stories
+```
+
+**For retrospectives:**
+```bash
+retro: completed user authentication feature
+# Analyzes work, identifies improvements, creates skills
+```
+
+---
+
+## Changelog
+
+**2026-01-30:**
+- Added integrated Development Workflow section (Attain → Beads → Memory Plans)
+- Documented full workflow phases: start ticket, context management, plan updates, completion
+
+**2026-01-29:**
+- Added Beads issue tracking guidelines (local-only, never commit to remote)
+- Reorganised plans to `~/.claude/memory/plans/<project>/` structure
+- Added "El Jefe" user preference
+
+**2026-01-27:**
+- Consolidated to plugin marketplace as primary system
+- Added documentation storage convention (`.claude/` layer)
+- Updated `/start-ticket` workflow with plan approval gate
+- Plans stored in `.claude/plans/` for reference during implementation
+
+**Plugin Marketplace:** `/Users/duy.nguyen/projects/mableit/attain-plugin-marketplace`

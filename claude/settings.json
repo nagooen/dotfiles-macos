@@ -2,7 +2,7 @@
   "model": "opus",
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/statusline-command.sh"
+    "command": "/Users/duy.nguyen/.claude/statusline-command.sh | bunx cc-safety-net --statusline"
   },
   "enabledPlugins": {
     "coding-tutor@every-marketplace": true,
@@ -10,7 +10,7 @@
     "planning-workflow@attain-plugin-marketplace": true,
     "developer-workflow@attain-plugin-marketplace": true,
     "review-swarm@attain-plugin-marketplace": true,
-    "safety-net@cc-marketplace": false,
+    "safety-net@cc-marketplace": true,
     "context7@claude-plugins-official": true,
     "atlassian@claude-plugins-official": true,
     "beads@beads-marketplace": true

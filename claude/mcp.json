@@ -1,0 +1,62 @@
+{
+  "mcpServers": {
+    "superwhisper": {
+      "command": "node",
+      "args": [
+        "/Users/duy.nguyen/projects/superwhisper-mcp/dist/index.js"
+      ],
+      "disabled": false,
+      "alwaysAllow": []
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "disabled": true,
+      "alwaysAllow": []
+    },
+    "atlassian": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.atlassian.com/v1/mcp"
+      ],
+      "disabled": false,
+      "alwaysAllow": []
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp"
+      ],
+      "disabled": false,
+      "alwaysAllow": []
+    },
+    "figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.figma.com/mcp"
+      ],
+      "disabled": false,
+      "alwaysAllow": []
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "disabled": false,
+      "alwaysAllow": []
+    }
+  }
+}
