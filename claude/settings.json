@@ -1,5 +1,4 @@
 {
-  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "/Users/duy.nguyen/.claude/statusline-command.sh | bunx cc-safety-net --statusline"
@@ -14,5 +13,19 @@
     "context7@claude-plugins-official": true,
     "atlassian@claude-plugins-official": true,
     "beads@beads-marketplace": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx eslint --quiet --no-error-on-unmatched-pattern {{filepath}} 2>/dev/null || true",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
   }
 }

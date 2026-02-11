@@ -8,6 +8,8 @@
 
 ### Planning Before Implementation
 
+**CRITICAL RULE:** NEVER start implementing code changes until the plan has been explicitly approved by the user. When asked to plan something, ONLY produce the plan document. Wait for explicit confirmation like "go ahead", "implement it", or "looks good" before writing any code. If unsure, ask: "Should I proceed with implementation?"
+
 - NEVER start editing, creating, or deleting source files until the user explicitly approves a plan.
 - When asked to review, summarise, or plan, provide ONLY the analysis/summary/plan first.
 - Wait for explicit approval ("go ahead", "approved", "implement it") before making any code changes.
@@ -15,6 +17,13 @@
 
 ### PR Review Workflow
 
+**PR Review Instructions:**
+When asked to review a PR or pull PR comments:
+- If asked to look at "my replies" or "my comments", focus on the USER's review comments, not the code diff
+- Always summarize findings FIRST before proposing changes
+- Ask before implementing fixes
+
+**Standard Workflow:**
 - When asked to review PR comments or summarise PR feedback:
   1. First provide ONLY a numbered summary grouped by: must-fix, suggestion, and nit.
   2. Wait for the user to confirm which items to address.
@@ -23,9 +32,13 @@
 
 ### Naming Conventions
 
+**CRITICAL:** Always follow existing naming patterns in the codebase. Before renaming or creating components, check sibling files/folders for the full naming convention (e.g., `job-application-agreement-support-terms` not just `agreement-support-terms`). When the user provides a specific name, use it exactly — do not shorten or modify it.
+
 - When creating or renaming components within a feature directory, use the FULL path-based prefix matching sibling components. Check existing sibling component selectors and file names for the naming pattern before proposing names.
 
-### CSS/SCSS Variables
+### CSS/SCSS Conventions
+
+**CRITICAL:** Use project CSS variables exactly as defined (e.g., `--grey-400` not `--color-grey-400`). Always verify variable names by checking the project's variables file before using them. When fixing styling issues, verify changes visually match the existing design system patterns.
 
 - Always verify CSS variable names against the project's actual variable definitions before using them (e.g., check the source file for exact names — do NOT guess prefixes like `--color-grey-400` when the actual name is `--grey-400`).
 
@@ -33,11 +46,25 @@
 
 - When a codebase has separate flows for different user roles (e.g., client-side vs worker-side), always confirm which side is relevant before proposing changes. Explore sibling directories to understand the boundary.
 
+### Angular/TypeScript Patterns
+
+**Data Access and Component Patterns:**
+- Follow existing patterns in the codebase for data access (synchronous vs observable). Check how sibling components access the same service before choosing an approach.
+- When working on wizard components, check the existing wizard form service pattern before implementing data flow.
+
+### External Tools and MCP
+
+**Atlassian/MCP Authentication:**
+If an Atlassian MCP call returns a 401 error, immediately tell the user: "Your Atlassian auth token has expired. Please re-authenticate and let me know when ready." Do not retry repeatedly.
+
 ### Git Operations
 
-- Before pushing, always check if the remote branch has newer commits and rebase if needed.
-- If a commit fails with a GPG signing error, retry with `--no-gpg-sign`.
-- Never force push without explicit user permission.
+**Best Practices:**
+- Always disable GPG signing when committing in sandbox mode: `git -c commit.gpgsign=false commit`
+- Before pushing, always pull/rebase first to avoid remote conflicts
+- For interactive git commands, pipe 'yes' or use non-interactive flags to avoid EOF errors
+- If a commit fails with a GPG signing error, retry with `--no-gpg-sign`
+- Never force push without explicit user permission
 
 ---
 
