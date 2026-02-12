@@ -60,10 +60,9 @@ If an Atlassian MCP call returns a 401 error, immediately tell the user: "Your A
 ### Git Operations
 
 **Best Practices:**
-- Always disable GPG signing when committing in sandbox mode: `git -c commit.gpgsign=false commit`
+- Always GPG sign commits (never use `--no-gpg-sign` or `-c commit.gpgsign=false`)
 - Before pushing, always pull/rebase first to avoid remote conflicts
 - For interactive git commands, pipe 'yes' or use non-interactive flags to avoid EOF errors
-- If a commit fails with a GPG signing error, retry with `--no-gpg-sign`
 - Never force push without explicit user permission
 
 ---
